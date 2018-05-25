@@ -52,6 +52,7 @@ CREATE TABLE `ProjectParkAddress` (
 CREATE TABLE ProjectFacilities (
     `facilityID` INT(5) NOT NULL DEFAULT -5,
     `otherID` INT(5) NOT NULL DEFAULT -5,
+	`Ftype` CHAR(1) NOT NULL DEFAULT 'A',
     PRIMARY KEY(`facilityID`)
 ) ENGINE=InnoDB;
 
@@ -138,21 +139,21 @@ INSERT INTO ProjectParkAddress (street, city, zip, state, parkID) VALUES ("Park 
 
 -- Fill Project Facilities --
 INSERT INTO ProjectFacilities (facilityID, otherID) VALUES
-(10000, 12300),
-(10001, 12301),
-(10002, 12302),
-(10003, 12303),
-(10004, 12304),
-(10010, 12310),
-(10011, 12311),
-(10012, 12312),
-(10013, 12313),
-(10014, 12314),
-(10020, 12320),
-(10021, 12321),
-(10022, 12322),
-(10023, 12323),
-(10024, 12324);
+(10000, 12300, 'p'),
+(10001, 12301, 'p'),
+(10002, 12302, 'p'),
+(10003, 12303, 'p'),
+(10004, 12304, 'p'),
+(10010, 12310, 't'),
+(10011, 12311, 't'),
+(10012, 12312, 't'),
+(10013, 12313, 't'),
+(10014, 12314, 't'),
+(10020, 12320, 'c'),
+(10021, 12321, 'c'),
+(10022, 12322, 'c'),
+(10023, 12323, 'c'),
+(10024, 12324, 'c');
 
 -- Fill Rating --
 INSERT INTO ProjectRating (ratingID, score, rDescription, username, facilityID)
