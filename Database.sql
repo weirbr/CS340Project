@@ -138,7 +138,7 @@ INSERT INTO ProjectParkAddress (street, city, zip, state, parkID) VALUES ("Park 
 ("Murray Highway", "Lakewoord", 97600, "OR", 12304);
 
 -- Fill Project Facilities --
-INSERT INTO ProjectFacilities (facilityID, otherID) VALUES
+INSERT INTO ProjectFacilities (facilityID, otherID, Ftype) VALUES
 (10000, 12300, 'p'),
 (10001, 12301, 'p'),
 (10002, 12302, 'p'),
