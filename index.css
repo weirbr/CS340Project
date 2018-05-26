@@ -1,1 +1,43 @@
- 
+header{
+   height: 20px;
+   background-color: lightblue;
+   margin-top: 0px;
+   margin-right: 0px;
+   margin-bottom: 0px;
+   padding: 20px 20px 20px 20px;
+   font-size: 1.5em;
+}
+
+header > h1{
+   color: white;
+   font-size: 3em;
+   font-style: italic;
+   text-align: right;
+}
+
+header em{
+   font-size: 0.75em;
+}
+
+nav ul{
+   list-style-type: none;
+   padding:0;
+   overflow: hidden;
+   background-color: #add8e682;
+   margin: 0 0 0 0;
+}
+
+nav li{
+   float: right;
+   color: black;
+   padding-right: 10px;
+   padding-left: 10px;
+}
+
+nav li:hover:not(.active){
+   background-color: #ade6db82;
+}
+
+nav .active{
+   background-color: green;
+} 
