@@ -18,11 +18,11 @@
 	
 	//variables
 	$location = mysqli_real_escape_string($conn, $_POST['location']);
-	echo "<p> $location </p>";
+	$attribute = mysqli_real_escape_string($conn, $_POST['attribute']);
 	
 	$query = "SELECT pName
 			FROM `ProjectPark`
-			WHERE pName = '$location'";
+			WHERE pName = '$location' AND pDescription LIKE '%'$attribute'%' ";
 			
 	$result = mysqli_query($conn, $query);
 	if ($result){
@@ -40,9 +40,10 @@
 	mysqli_close($conn);
 
 ?>
-
-<section id = "location"> Pick a Location
-	<form method = "POST" id = "searchForm">
+<h2> <?php echo $msg; ?> </h2>
+<section id = "searchForm"> 
+	<form method = "POST" id = "location">
+	<p> Pick a Location </p>
 		<div>
 			<input type="checkbox" name = "location" value = "Jefferson Park"> Jefferson Park
 		</div>
@@ -62,6 +63,25 @@
 		<div>
 			<input type="checkbox" name = "location" value = "Washington Park"> Washington Park
 		<div>
+		
+	<p> Pick an attribute </p>
+		<div>
+			<input type="checkbox" name = "attribute" value = "scenic"> scenic
+		</div>
+		
+		<div>
+			<input type="checkbox" name = "attribute" value = "campsite"> campsites
+		</div>
+		
+		<div>
+			<input type="checkbox" name = "attribute" value = "hike"> hiking
+		</div>
+		<div>
+			<input type="checkbox" name = "attribute" value = "waterfall"> waterfalls
+		</div>
+		<div>
+			<input type="checkbox" name = "attribute" value = "test"> test
+		</div>
 		
 		<p>
 		<input type = "submit" value = "Search" />
