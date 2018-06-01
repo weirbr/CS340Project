@@ -41,3 +41,23 @@ nav li:hover:not(.active){
 nav .active{
    background-color: green;
 } 
+
+.login{
+	float: left;
+	padding-left: 50px;
+}
+
+.signup{
+	float: left;
+	
+}
+
+#location{
+	float: left;
+	outline-style: solid;
+	outline-color: black;
+	padding-bottom: 5px;
+	padding-top: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
