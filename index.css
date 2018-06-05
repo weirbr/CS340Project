@@ -61,3 +61,10 @@ nav .active{
 	padding-left: 10px;
 	padding-right: 10px;
 }
+
+#t01{
+	border: 1px solid black;
+	border-collapse: collapse;
+	width: 500px;
+}
+
