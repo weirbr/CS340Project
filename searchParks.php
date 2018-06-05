@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<?php
+		$currentpage="Search Parks";
+		include "pages.php";
+		
+?>
 <html>
 	<head>
 	<title>Search Parks</title>
