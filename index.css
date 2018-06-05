@@ -19,6 +19,7 @@ header em{
    font-size: 0.75em;
 }
 
+
 nav ul{
    list-style-type: none;
    padding:0;
@@ -27,19 +28,21 @@ nav ul{
    margin: 0 0 0 0;
 }
 
-nav li{
+nav li a{
    float: right;
    color: black;
    padding-right: 10px;
    padding-left: 10px;
+   text-decoration: none;
 }
 
-nav li:hover:not(.active){
+nav li a:hover:not(.active){
    background-color: #ade6db82;
 }
 
 nav .active{
-   background-color: green;
+   background-color: lightblue;  
+   
 } 
 
 .login{
