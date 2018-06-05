@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<?php
+		$currentpage="Home";
+		include "pages.php";
+		
+?>
 <html>
 	<head>
 	<title>Home Page</title>
