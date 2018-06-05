@@ -1,4 +1,9 @@
 <!DOCTYPE html>
+<?php
+		$currentpage="Profile";
+		include "pages.php";
+		
+?>
 <html>
 	<head>
 	<title>Sign Up or Login</title>
