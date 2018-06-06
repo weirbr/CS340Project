@@ -19,7 +19,6 @@ header em{
    font-size: 0.75em;
 }
 
-
 nav ul{
    list-style-type: none;
    padding:0;
@@ -43,7 +42,7 @@ nav li a:hover:not(.active){
 nav .active{
    background-color: lightblue;  
    
-} 
+}
 
 .login{
 	float: left;
