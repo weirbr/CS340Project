@@ -53,7 +53,7 @@
 ?>
 <section>
     <h2> <?php echo $msg; ?> </h2>
-	<form method="post" id="addForm">
+	<form method="post" id="addForm" class = "signup">
 <fieldset>
 	<legend>Sign Up:</legend>
     <p>
