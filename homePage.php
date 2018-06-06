@@ -20,22 +20,24 @@
 	if (!$conn){
 	   die('Could not connect: ' . mysql_error());
 	}
-	$query = "SELECT htID, htName, htDescription
-	FROM `ProjectHikes&Trails`
-	WHERE htID = 12310"; 
-		//(SELECT P2.htID
-		//FROM `ProjectHikes&Trails` P2
-		//GROUP BY P2.htAvgRating)";
-		//LIMIT 1);";
-	//$query = "SELECT * FROM `ProjectHikes&Trails`";
-
+	
+	//HIGHEST RATED PARKS
+	$query = "SELECT pName AS Name, pDescription AS Description
+	FROM `ProjectPark`
+	WHERE parkID IN 
+    (SELECT P.parkID
+    FROM ProjectPark P
+    WHERE P.pAvgRating =
+		(SELECT MAX(P2.pAvgRating)
+		FROM ProjectPark P2))";
+	
 	$result = mysqli_query($conn, $query);
 	if (!result){
 	   die("Query failed");
 	}
 	// get number of columns in table	
 	$fields_num = mysqli_num_fields($result);
-	echo "<h1>Highest Rated Hike</h1>";
+	echo "<div id='bestPark'>Highest Rated Park";
 	echo "<table id='t01' border='1'><tr>";
 	
 
@@ -51,12 +53,88 @@
 		// of $row to $cell variable	
 		foreach($row as $cell)		
 			echo "<td>$cell</td>";	
-		echo "</tr>\n";
+		echo "</tr>\n</div>";
 	}
+	echo "</table></div>";
+	
+	//HIGHEST RATED HIKES
+	$q2 = "SELECT htName AS Name, htDescription AS Description
+	FROM `ProjectHikes&Trails`
+	WHERE htID = 
+    (SELECT P.htID
+    FROM `ProjectHikes&Trails` P
+    WHERE P.tAvgRating IN
+		(SELECT MAX(P2.tAvgRating)
+		FROM `ProjectHikes&Trails` P2))";
+	
+	$r2 = mysqli_query($conn, $q2);
+	if (!r2){
+	   die("Query failed");
+	}
+	// get number of columns in table	
+	$fields_num = mysqli_num_fields($r2);
+	echo "<div id='bestHike'>Highest Rated Hike";
+	echo "<table id='t01' border='1'><tr>";
+	
+
+	// printing table headers
+	for ($i=0; $i<$fields_num; $i++){
+	   $field = mysqli_fetch_field($r2);
+	   echo "<td><b>$field->name</b></td>";
+	}
+	echo "</tr>\n";
+	while($row = mysqli_fetch_row($r2)) {	
+		echo "<tr>";	
+		// $row is array... foreach( .. ) puts every element
+		// of $row to $cell variable	
+		foreach($row as $cell)		
+			echo "<td>$cell</td>";	
+		echo "</tr>\n</div>";
+	}
+	echo "</table></div>";
+	
+	
+	//HIGHEST CAMPSITE
+	$q3 = "SELECT cName AS Name, cDescription AS Description
+	FROM `ProjectCampsites`
+	WHERE campID = 
+    (SELECT P.campID
+    FROM `ProjectCampsites` P
+    WHERE P.cAvgRating IN
+		(SELECT MAX(P2.cAvgRating)
+		FROM `ProjectCampsites` P2))";
+	
+	$r3 = mysqli_query($conn, $q3);
+	if (!r3){
+	   die("Query failed");
+	}
+	// get number of columns in table	
+	$fields_num = mysqli_num_fields($r3);
+	echo "<div id='bestCamp'>Highest Rated Campsite";
+	echo "<table id='t01' border='1'><tr>";
+	
+
+	// printing table headers
+	for ($i=0; $i<$fields_num; $i++){
+	   $field = mysqli_fetch_field($r3);
+	   echo "<td><b>$field->name</b></td>";
+	}
+	echo "</tr>\n";
+	while($row = mysqli_fetch_row($r3)) {	
+		echo "<tr>";	
+		// $row is array... foreach( .. ) puts every element
+		// of $row to $cell variable	
+		foreach($row as $cell)		
+			echo "<td>$cell</td>";	
+		echo "</tr>\n</div>";
+	}
+	echo "</table></div>";
 	
 	
 
 	mysqli_free_result($result);
+	mysqli_free_result($r2);
+	mysqli_free_result($r3);
 	mysqli_close($conn);
 
 
