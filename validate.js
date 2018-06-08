@@ -1,3 +1,4 @@
+//maybe add 2 more inputs for login???
 function validate(pswd, user){
     
 	re1 = /[0-9]/;
@@ -54,26 +55,24 @@ window.onload = function(){
     //all inputs with the class required are looped through 
     var requiredInputs = document.querySelectorAll(".required");
     for (var i=0; i < requiredInputs.length; i++){
-		requiredInputs[i].onfocus = function(){
-			this.style.backgroundColor = "#EEEE00";
-		}
+	requiredInputs[i].onfocus = function(){
+		this.style.backgroundColor = "#EEEE00";
+	}
     }
-			
-		
-		
-    //on submitting the form, "empty" checks are performed on required inputs.
     myForm.onsubmit = function(e){
-		
-		var pswd = document.getElementById('password');
-		var user = document.getElementById('username');
-		var temp = validate(pswd,user);
 
-			if(temp == false ){
-				e.preventDefault();
-				makeRed(requiredInputs[i]);
-			}
-			else{
-				makeClean(requiredInputs[i]);
-			} 
+	var pswd = document.getElementById('password');
+	var user = document.getElementById('username');
+	var temp = validate(pswd,user);
+
+	    	//if inputs are not validated...
+		if(temp == false ){
+			e.preventDefault();
+			makeRed(requiredInputs[i]);
+		}
+	    	//if good inputs, make clean
+		else{
+			makeClean(requiredInputs[i]);
+		} 
 	}   
 }
