@@ -21,25 +21,61 @@
 	if (!$conn){
 	   die('Could not connect: ' . mysql_error());
 	}
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		// Escape user inputs for security
-		$username = mysqli_real_escape_string($conn, $_POST['username']);
-		$password = mysqli_real_escape_string($conn, $_POST['password']);
-		$email = mysqli_real_escape_string($conn, $_POST['email']);
-		
-		$uNameLogin = mysqli_real_escape_string($conn, $_POST['username2']);
-		$uPassLogin = mysqli_real_escape_string($conn, $_POST['password2']);
-		
-		//Login
-		if ($username2 != "" || $password2 != "") {
+	
+	//check for signing up
+	if(!empty($_POST['email'])){
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+			// Escape user inputs for security
+			$username = mysqli_real_escape_string($conn, $_POST['username']);
+			$password = mysqli_real_escape_string($conn, $_POST['password']);
+			$email = mysqli_real_escape_string($conn, $_POST['email']);
+			
+			$uNameLogin = mysqli_real_escape_string($conn, $_POST['username2']);
+			$uPassLogin = mysqli_real_escape_string($conn, $_POST['password2']);
+			//echo "test";
+			
+			$q = "SELECT * FROM ProjectUser where username = '$uNameLogin'";
+			$r = mysqli_query($conn, $q);
+			if(mysqli_num_rows($r)>0){
+				$msg = "<h2>Within table</h2>";
+			}
+			
+			
+			
 			// See if username is already in the table
-			$queryL = "SELECT salt FROM ProjectUser WHERE username='$uNameLogin' ";
+			$queryIn = "SELECT * FROM ProjectUser where username='$username' ";
+			$resultIn = mysqli_query($conn, $queryIn);
+			if (mysqli_num_rows($resultIn)>0) {
+					$msg ="<h2>Can't Add to Table</h2> There is already a user with that username $username<p>";
+			} else {	
+				// attempt insert query 
+				//make some salt
+				$salt = base64_encode(mcrypt_create_iv(12 , MCRYPT_DEV_URANDOM));
+				$hash = MD5($password.$salt);
+				$query = "INSERT INTO ProjectUser (username, email, password, salt) VALUES ('$username', '$email', '$hash', '$salt')";
+				if(mysqli_query($conn, $query)){
+					$msg =  "Record added successfully.<p>";
+				} else{
+					echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+				}
+			}
+		
+		}
+	}
+	//login option
+	else{
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+			$uname = mysqli_real_escape_string($conn, $_POST['username2']);
+			$pword = mysqli_real_escape_string($conn, $_POST['password2']);
+			
+			// See if username is already in the table
+			$queryL = "SELECT salt FROM ProjectUser WHERE username='$uname' ";
 			$resultL = mysqli_query($conn, $queryL);
 			
 			if ($row = mysqli_fetch_assoc($resultL)) {
 				$salt2 = $row['salt'];
-				$hash = MD5($uPassLogin.$salt2);
-				$saltQuery = "SELECT username FROM ProjectUser WHERE username='$uNameLogin' AND password='$hash'";
+				$hash = MD5($pword.$salt2);
+				$saltQuery = "SELECT username FROM ProjectUser WHERE username='$uname' AND password='$hash'";
 				$finalResult = mysqli_query($conn,$saltQuery);
 				if($row = mysqli_fetch_assoc($finalResult)){
 					$msg ="You are logged in<p>";
@@ -50,34 +86,9 @@
 			} 
 			else {
 				$msg = "Username or password is incorrect<p>";
-			}
-		}
-		//Signup
-		else {
-			// See if username is already in the table
-			$queryIn = "SELECT * FROM ProjectUser where username='$username' ";
-			$resultIn = mysqli_query($conn, $queryIn);
-		
-			if ($username == "" || $password == "") {
-				$msg = "Login or Sign Up";
-			} 
-			else if (mysqli_num_rows($resultIn)>0) {
-				$msg ="<h2>Can't Add to Table</h2> There is already a user with that username<p>";
-			} 
-			else {	
-				// attempt insert query 
-				// make some salt
-				$salt = base64_encode(mcrypt_create_iv(12 , MCRYPT_DEV_URANDOM));
-				$query = "INSERT INTO ProjectUser (username, email, password, salt) VALUES ('$username', '$email', MD5('$password$salt'), '$salt')";
-				if(mysqli_query($conn, $query)){
-					$msg =  "Record added successfully.<p>";
-				} else{
-					echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
-				}
-			}
+			}	
 		}
 	}
-	
 	
 	// close connection
 	mysqli_close($conn);
