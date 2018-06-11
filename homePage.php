@@ -23,7 +23,7 @@
 	}
 	
 	//HIGHEST RATED PARKS
-	$query = "SELECT pName AS Name, pDescription AS Description
+	$query = "SELECT pName AS Name, pDescription AS Description, , pAvgRating AS Rating
 	FROM `ProjectPark`
 	WHERE parkID IN 
     (SELECT P.parkID
@@ -59,7 +59,7 @@
 	echo "</table></div>";
 	
 	//HIGHEST RATED HIKES
-	$q2 = "SELECT htName AS Name, htDescription AS Description
+	$q2 = "SELECT htName AS Name, htDescription AS Description, tAvgRating AS Rating
 	FROM `ProjectHikes&Trails`
 	WHERE htID = 
     (SELECT P.htID
@@ -96,7 +96,7 @@
 	
 	
 	//HIGHEST CAMPSITE
-	$q3 = "SELECT cName AS Name, cDescription AS Description
+	$q3 = "SELECT cName AS Name, cDescription AS Description, cAvgRating AS Rating
 	FROM `ProjectCampsites`
 	WHERE campID = 
     (SELECT P.campID
