@@ -10,6 +10,7 @@
 	<link rel = "stylesheet" href="index.css">
 	</head>
 <body>
+</body>
 
 <?php
 	include "header.php";
@@ -37,7 +38,7 @@
 	}
 	// get number of columns in table	
 	$fields_num = mysqli_num_fields($result);
-	echo "<div id='bestPark'>Highest Rated Park";
+	echo "<div><div id='bestHeader'>Highest Rated Parks</div>";
 	echo "<table id='t01' border='1'><tr>";
 	
 
@@ -65,7 +66,7 @@
     FROM `ProjectHikes&Trails` P
     WHERE P.tAvgRating IN
 		(SELECT MAX(P2.tAvgRating)
-		FROM `ProjectHikes&Trails` P2))";
+		FROM `ProjectHikes&Trails` P2)LIMIT 1)";
 	
 	$r2 = mysqli_query($conn, $q2);
 	if (!r2){
@@ -73,7 +74,7 @@
 	}
 	// get number of columns in table	
 	$fields_num = mysqli_num_fields($r2);
-	echo "<div id='bestHike'>Highest Rated Hike";
+	echo "<div><div id='bestHeader'>Highest Rated Hike</div>";
 	echo "<table id='t01' border='1'><tr>";
 	
 
@@ -102,7 +103,7 @@
     FROM `ProjectCampsites` P
     WHERE P.cAvgRating IN
 		(SELECT MAX(P2.cAvgRating)
-		FROM `ProjectCampsites` P2))";
+		FROM `ProjectCampsites` P2) LIMIT 1)";
 	
 	$r3 = mysqli_query($conn, $q3);
 	if (!r3){
@@ -110,7 +111,7 @@
 	}
 	// get number of columns in table	
 	$fields_num = mysqli_num_fields($r3);
-	echo "<div id='bestCamp'>Highest Rated Campsite";
+	echo "<div><div id='bestHeader'>Highest Rated Campsite</div>";
 	echo "<table id='t01' border='1'><tr>";
 	
 
@@ -141,5 +142,4 @@
 	
 ?>
 
-</body>
 </html>
