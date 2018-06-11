@@ -29,16 +29,32 @@
 		
 		$uNameLogin = mysqli_real_escape_string($conn, $_POST['username2']);
 		$uPassLogin = mysqli_real_escape_string($conn, $_POST['password2']);
-		// See if username is already in the table
-		$queryIn = "SELECT * FROM ProjectUser where username='$username' ";
-		$resultIn = mysqli_query($conn, $queryIn);
 		
 		//Login
 		if ($username2 != "" || $password2 != "") {
+			$q1 = "SELECT password FROM ProjectUser where username='$username2' ";
+			$r1 = mysqli_query($conn, $q1);
 			
+			if($r1){
+				
+				$q2 = "SELECT salt FROM ProjectUser where username='$username2' ";
+				$r2 = mysqli_query($conn, $q2);
+				if($r1 == MD5('$password2$salt')){
+					$msg ="<p>You have logged in! Welcome $username</p>";
+				}
+				else{
+					$msg = "<p>Could not login.</p>";
+				}
+			}
+			else{
+				$msg = "<p>Could not login</p>";
+			}
 		}
 		//Signup
 		else {
+			// See if username is already in the table
+			$queryIn = "SELECT * FROM ProjectUser where username='$username' ";
+			$resultIn = mysqli_query($conn, $queryIn);
 		
 			if ($username == "" || $password == "") {
 				$msg = "Login or Sign Up";
