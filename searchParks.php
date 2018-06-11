@@ -25,22 +25,64 @@
 	$location = mysqli_real_escape_string($conn, $_POST['location']);
 	$attribute = mysqli_real_escape_string($conn, $_POST['attribute']);
 	
-	$query = "SELECT pName
-			FROM `ProjectPark`
-			WHERE pName = '$location' AND pDescription LIKE '%'$attribute'%' ";
+		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+			if($attribute == "" && $location != ""){
+				$query = "SELECT pName
+						FROM `ProjectPark`
+						WHERE pName = '$location'";
+						
+				$result = mysqli_query($conn, $query);
+				if ($result){
+					$msg = "<p>You might like this park we found! Try out $location</p>";
+					//$msg = "<p>You might like this park we found! Try out $result</p>";
+					
+					/* $query1 = "SELECT pDescription
+						FROM `ProjectPark`
+						WHERE pName = '$location'";
+						
+						$desc = mysqli_query($conn, $query1);
+						while($row=mysql_fetch_array($desc, MYSQL_ASSOC)){
+							$stringf = $row['pDescription'];
+							echo $stringf;
+						} */
+				}
+				else{
+					$msg = "<p>Sorry, we couldn't find a park in $location</p>";
+				}	
+			}
 			
-	$result = mysqli_query($conn, $query);
-	if ($result){
-		$msg = "<p>There is a park in $location</p>";
-	}
-	else{
-		$msg = "<p>No Park was found</p>";
-	}
-	echo "$msg";	
-	
-
-	
-	
+			else if($attribute != "" && $location == ""){
+				$query = "SELECT pName
+						FROM `ProjectPark` 
+						WHERE pDescription LIKE '%{$attribute}%'
+						LIMIT 1";
+						
+				$result = mysqli_query($conn, $query);
+				if ($result){
+					//$msg = "<p>You might like this park we found! Try out $result, we hear that it is $attribute </p>";
+					$msg = "<p>You might like this park we found! Try out this park, we hear that it is $attribute </p>";
+					
+				}
+				else{
+					$msg = "<p>Sorry, we couldn't find a park that was $attribute</p>";
+				}	
+			}
+			
+			else{
+				
+				$query = "SELECT pName
+						FROM `ProjectPark`
+			WHERE pName = '$location' AND pDescription LIKE '%{$attribute}%' ";
+						
+				$result = mysqli_query($conn, $query);
+				if ($result){
+					$msg = "<p>There is a park in $location that is $attribute </p>";
+				}
+				else{
+					$msg = "<p>Sorry, we couldn't find a park that was $attribute in $location</p>";
+				}	
+			}
+		}
 	mysqli_free_result($result);
 	mysqli_close($conn);
 
@@ -83,10 +125,6 @@
 		</div>
 		<div>
 			<input type="checkbox" name = "attribute" value = "waterfall"> waterfalls
-		</div>
-		<div>
-			<input type="checkbox" name = "attribute" value = "test"> test
-		</div>
 		
 		<p>
 		<input type = "submit" value = "Search" />
