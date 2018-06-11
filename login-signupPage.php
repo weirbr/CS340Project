@@ -8,6 +8,7 @@
 	<head>
 	<title>Sign Up or Login</title>
 	<link rel = "stylesheet" href="index.css">
+	<script type="text/javascript" src = "validate.js" ></script> 
 	</head>
 <body>
 
@@ -31,21 +32,34 @@
 		// See if username is already in the table
 		$queryIn = "SELECT * FROM ProjectUser where username='$username' ";
 		$resultIn = mysqli_query($conn, $queryIn);
-		if (mysqli_num_rows($resultIn)>0) {
-				$msg ="<h2>Can't Add to Table</h2> There is already a user with that username $username<p>";
-		} else {	
-			// attempt insert query 
-			//make some salt
-			$salt = base64_encode(mcrypt_create_iv(12 , MCRYPT_DEV_URANDOM));
-			$query = "INSERT INTO ProjectUser (username, email, password, salt) VALUES ('$username', '$email', MD5('$password$salt'), '$salt')";
-			if(mysqli_query($conn, $query)){
-				$msg =  "Record added successfully.<p>";
-			} else{
-				echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+		
+		//Login
+		if ($username2 != "" || $password2 != "") {
+			
+		}
+		//Signup
+		else {
+		
+			if ($username == "" || $password == "") {
+				$msg = "Login or Sign Up";
+			} 
+			else if (mysqli_num_rows($resultIn)>0) {
+				$msg ="<h2>Can't Add to Table</h2> There is already a user with that username<p>";
+			} 
+			else {	
+				// attempt insert query 
+				// make some salt
+				$salt = base64_encode(mcrypt_create_iv(12 , MCRYPT_DEV_URANDOM));
+				$query = "INSERT INTO ProjectUser (username, email, password, salt) VALUES ('$username', '$email', MD5('$password$salt'), '$salt')";
+				if(mysqli_query($conn, $query)){
+					$msg =  "Record added successfully.<p>";
+				} else{
+					echo "ERROR: Could not able to execute $query. " . mysqli_error($conn);
+				}
 			}
 		}
-	
 	}
+	
 	
 	// close connection
 	mysqli_close($conn);
@@ -53,7 +67,7 @@
 ?>
 <section>
     <h2> <?php echo $msg; ?> </h2>
-	<form method="post" id="addForm" class = "signup">
+	<form method="post" id="addForm">
 <fieldset>
 	<legend>Sign Up:</legend>
     <p>
