@@ -32,22 +32,24 @@
 		
 		//Login
 		if ($username2 != "" || $password2 != "") {
-			$q1 = "SELECT password FROM ProjectUser where username='$username2' ";
-			$r1 = mysqli_query($conn, $q1);
+			// See if username is already in the table
+			$queryL = "SELECT salt FROM ProjectUser WHERE username='$uNameLogin' ";
+			$resultL = mysqli_query($conn, $queryL);
 			
-			if($r1){
-				
-				$q2 = "SELECT salt FROM ProjectUser where username='$username2' ";
-				$r2 = mysqli_query($conn, $q2);
-				if($r1 == MD5('$password2$salt')){
-					$msg ="<p>You have logged in! Welcome $username</p>";
+			if ($row = mysqli_fetch_assoc($resultL)) {
+				$salt2 = $row['salt'];
+				$hash = MD5($uPassLogin.$salt2);
+				$saltQuery = "SELECT username FROM ProjectUser WHERE username='$uNameLogin' AND password='$hash'";
+				$finalResult = mysqli_query($conn,$saltQuery);
+				if($row = mysqli_fetch_assoc($finalResult)){
+					$msg ="You are logged in<p>";
 				}
 				else{
-					$msg = "<p>Could not login.</p>";
+					$msg = "Incorrect <p>";
 				}
-			}
-			else{
-				$msg = "<p>Could not login</p>";
+			} 
+			else {
+				$msg = "Username or password is incorrect<p>";
 			}
 		}
 		//Signup
