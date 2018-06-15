@@ -27,59 +27,107 @@
 	
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			if($attribute == "" && $location != ""){
-				$query = "SELECT pName
-						FROM `ProjectPark`
-						WHERE pName = '$location'";
+				$query = "SELECT city, parkID
+						FROM `ProjectParkAddress`
+						WHERE city = '$location'
+						LIMIT 1";
 						
 				$result = mysqli_query($conn, $query);
 				if ($result){
-					$msg = "<p>You might like this park we found! Try out $location</p>";
-					//$msg = "<p>You might like this park we found! Try out $result</p>";
-					
-					/* $query1 = "SELECT pDescription
-						FROM `ProjectPark`
-						WHERE pName = '$location'";
 						
-						$desc = mysqli_query($conn, $query1);
-						while($row=mysql_fetch_array($desc, MYSQL_ASSOC)){
-							$stringf = $row['pDescription'];
-							echo $stringf;
-						} */
+					while($row = mysqli_fetch_row($result)) {
+					$city = $row[0];
+					$parkID = $row[1];
+					}
+					
+					$query = "SELECT pName
+						FROM `ProjectPark`
+						WHERE parkID = '$parkID'
+						LIMTI 1";
+						
+					$result = mysqli_query($conn, $query);
+					
+					while($row = mysqli_fetch_row($result)) {
+						$pName = $row[0];
+					}
+					$msg = "<p>You might like this park we found! Try out <em>$pName</em> in <em>$city</em></p>";
+				
 				}
 				else{
-					$msg = "<p>Sorry, we couldn't find a park in $location</p>";
+					$msg = "<p>Sorry, we couldn't find a park in <em>$location</em></p>";
 				}	
 			}
 			
 			else if($attribute != "" && $location == ""){
-				$query = "SELECT pName
+				$query = "SELECT pName, parkID
 						FROM `ProjectPark` 
 						WHERE pDescription LIKE '%{$attribute}%'
 						LIMIT 1";
 						
 				$result = mysqli_query($conn, $query);
 				if ($result){
-					//$msg = "<p>You might like this park we found! Try out $result, we hear that it is $attribute </p>";
-					$msg = "<p>You might like this park we found! Try out this park, we hear that it is $attribute </p>";
+					
+					while($row = mysqli_fetch_row($result)) {
+						$pName = $row[0];
+						$parkID = $row[1];
+					}
+					
+					$query = "SELECT city
+						FROM `ProjectParkAddress`
+						WHERE parkID = '$parkID'
+						LIMIT 1";
+					
+					$result = mysqli_query($conn, $query);
+						
+					while($row = mysqli_fetch_row($result)) {
+						$city = $row[0];
+					}
+					
+					$msg = "<p>You might like this park we found! Try out <em>$pName</em> in <em>$city</em>, we hear that it is <em>$attribute</em> </p>";
 					
 				}
 				else{
-					$msg = "<p>Sorry, we couldn't find a park that was $attribute</p>";
+					$msg = "<p>Sorry, we couldn't find a park that was <em>$attribute</em></p>";
 				}	
 			}
 			
-			else{
+			else if($attribute != "" && $location != ""){
 				
-				$query = "SELECT pName
-						FROM `ProjectPark`
-			WHERE pName = '$location' AND pDescription LIKE '%{$attribute}%' ";
+				$query = "SELECT city, parkID
+						FROM `ProjectParkAddress`
+						WHERE city = '$location'
+						LIMIT 1";
 						
 				$result = mysqli_query($conn, $query);
+				
+				while($row = mysqli_fetch_row($result)) {
+						$city = $row[0];
+						$parkID1 = $row[1];
+					}
+					
 				if ($result){
-					$msg = "<p>There is a park in $location that is $attribute </p>";
+					$query = "SELECT pName, parkID
+						FROM `ProjectPark`
+						WHERE pDescription LIKE '%{$attribute}%'
+						LIMIT 1";
+					
+					$result = mysqli_query($conn, $query);
+						
+					while($row = mysqli_fetch_row($result)) {
+						$pName = $row[0];
+						$parkID2 = $row[1];
+					}
+					
+					if($parkID1==$parkID2){
+						
+						$msg = "<p>There is a park in <em>$city</em> that has <em>$attribute</em> called <em>$pName</em> </p>";
+					}
+					else{
+						$msg = "<p>Sorry, we couldn't find a park that has <em>$attribute</em> in <em>$city</em></p>";
+					}
 				}
 				else{
-					$msg = "<p>Sorry, we couldn't find a park that was $attribute in $location</p>";
+					$msg = "<p>Sorry, we couldn't find a park that has <em>$attribute</em> in <em>$city</em></p>";
 				}	
 			}
 		}
@@ -92,24 +140,21 @@
 	<form method = "POST" id = "location">
 	<p> Pick a Location </p>
 		<div>
-			<input type="checkbox" name = "location" value = "Jefferson Park"> Jefferson Park
+			<input type="checkbox" name = "location" value = "Grant City"> Grant City
 		</div>
 		
 		<div>
-			<input type="checkbox" name = "location" value = "Sierra Park"> Sierra Park
+			<input type="checkbox" name = "location" value = "Tri Cities"> Tri Cities
 		</div>
 		
 		<div>
-			<input type="checkbox" name = "location" value = "Grant's Plateau"> Grant's Plateau
+			<input type="checkbox" name = "location" value = "Laketon"> Laketon
 		</div>
 		
 		<div>
-			<input type="checkbox" name = "location" value = "Arch Park"> Arch Park
+			<input type="checkbox" name = "location" value = "Lakewoord"> Lakewood
 		</div>
 		
-		<div>
-			<input type="checkbox" name = "location" value = "Washington Park"> Washington Park
-		<div>
 		
 	<p> Pick an attribute </p>
 		<div>
@@ -117,14 +162,14 @@
 		</div>
 		
 		<div>
-			<input type="checkbox" name = "attribute" value = "campsite"> campsites
+			<input type="checkbox" name = "attribute" value = "campsites"> campsites
 		</div>
 		
 		<div>
-			<input type="checkbox" name = "attribute" value = "hike"> hiking
+			<input type="checkbox" name = "attribute" value = "hikes"> hiking
 		</div>
 		<div>
-			<input type="checkbox" name = "attribute" value = "waterfall"> waterfalls
+			<input type="checkbox" name = "attribute" value = "waterfalls"> waterfalls
 		
 		<p>
 		<input type = "submit" value = "Search" />
